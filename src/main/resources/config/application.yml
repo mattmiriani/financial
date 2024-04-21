@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: finance-control
+  datasource:
+    url: jdbc:postgresql://localhost:5432/finance-control
+    # noinspection SpringBootApplicationYaml
+    driver-class-name: org.postgresql.Driver
+    username: finance-control
+    password: finance-control
+  jpa:
+    properties.hibernate:
+      generate_statistics: false
+      order_by:
+        default_null_ordering: last
+    hibernate:
+      # noinspection SpringBootApplicationYaml
+      dialect: org.hibernate.dialect.PostgreSQL95alect
+      ddl-auto: validate
+    open-in-view: true
+    show-sql: false
+  liquibase:
+    change-log: classpath:db/changelog/changeLog.finance-control.default.xml
+    default-schema: public
+  servlet:
+    multipart:
+      maxFileSize: -1
+      maxRequestSize: -1
+
+server:
+  port: 8080

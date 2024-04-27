@@ -1,6 +1,6 @@
 package com.matt.financecontrol;
 
-import com.matt.financecontrol.config.ApplicationProperties;
+import com.matt.financecontrol.config.properties.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;

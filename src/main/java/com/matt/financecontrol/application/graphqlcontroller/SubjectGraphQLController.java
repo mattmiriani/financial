@@ -1,7 +1,6 @@
 package com.matt.financecontrol.application.graphqlcontroller;
 
 import com.matt.financecontrol.application.records.PageableRecord;
-import com.matt.financecontrol.application.records.SubjectRecord;
 import com.matt.financecontrol.model.entity.Subject;
 import com.matt.financecontrol.model.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,9 @@ public class SubjectGraphQLController {
     }
 
     @QueryMapping
-    public Page<Subject> findAllSubjects(@Argument SubjectRecord subjectRecord,
+    public Page<Subject> findAllSubjects(@Argument Subject subject,
                                          @Argument PageableRecord pageableRecord) {
-        return this.subjectService.findAll(subjectRecord, pageableRecord.getPageable());
+        return this.subjectService.findAll(subject, pageableRecord.getPageable());
     }
 
     @QueryMapping
@@ -37,5 +36,22 @@ public class SubjectGraphQLController {
     @MutationMapping
     public Subject updateSubject(@Argument Subject subject) {
         return this.subjectService.update(subject);
+    }
+
+    @MutationMapping
+    public Subject updateSubjectUsername(@Argument Subject subject,
+                                         @Argument String username) {
+        return this.subjectService.updateToUsername(subject, username);
+    }
+
+    @MutationMapping
+    public Subject updateSubjectEmail(@Argument Subject subject,
+                                      @Argument String email) {
+        return this.subjectService.updateToEmail(subject, email);
+    }
+
+    @MutationMapping
+    public boolean activateOrDeactivate(@Argument Subject subject) {
+        return this.subjectService.activateOrDeactivate(subject.getId());
     }
 }

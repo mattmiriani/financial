@@ -1,6 +1,5 @@
 package com.matt.financecontrol.model.service;
 
-import com.matt.financecontrol.application.records.SubjectRecord;
 import com.matt.financecontrol.config.FinanceControlBusinessException;
 import com.matt.financecontrol.model.entity.Subject;
 import com.matt.financecontrol.model.repository.SubjectRepository;
@@ -31,9 +30,9 @@ public class SubjectService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Subject> findAll(SubjectRecord subjectRecord, Pageable pageable) {
+    public Page<Subject> findAll(Subject subject, Pageable pageable) {
         return this.subjectRepository.findAll(
-                this.subjectSpecification.filter(subjectRecord),
+                this.subjectSpecification.filter(subject),
                 pageable
         );
     }
@@ -70,33 +69,33 @@ public class SubjectService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void activateOrDeactivate(UUID subjectId, boolean status) {
-        var subject = this.findById(subjectId);
-
-        subject.setActive(status);
-
-        this.save(subject);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updateToUsername(UUID subjectId, String newUsername) {
-        var subject = this.findById(subjectId);
+    public Subject updateToUsername(Subject subject, String newUsername) {
+        var subjectToUpdate = this.findById(subject.getId());
 
         this.subjectValidator.existsByUsername(newUsername);
 
-        subject.setUsername(newUsername);
+        subjectToUpdate.setUsername(newUsername);
 
-        this.save(subject);
+        return this.save(subjectToUpdate);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void updateToEmail(UUID subjectId, String newEmail) {
-        var subject = this.findById(subjectId);
+    public Subject updateToEmail(Subject subject, String newEmail) {
+        var subjectToUpdate = this.findById(subject.getId());
 
         this.subjectValidator.existsByEmail(newEmail);
 
-        subject.setEmail(newEmail);
+        subjectToUpdate.setEmail(newEmail);
 
-        this.save(subject);
+        return this.save(subjectToUpdate);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public boolean activateOrDeactivate(UUID subjectId) {
+        var subjectToUpdate = this.findById(subjectId);
+
+        subjectToUpdate.setActive(!subjectToUpdate.getActive());
+
+        return this.save(subjectToUpdate).getActive();
     }
 }

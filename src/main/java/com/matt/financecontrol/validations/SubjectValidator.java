@@ -1,6 +1,5 @@
 package com.matt.financecontrol.validations;
 
-import com.matt.financecontrol.application.records.SubjectRecord;
 import com.matt.financecontrol.config.FinanceControlBusinessException;
 import com.matt.financecontrol.config.annotation.Validator;
 import com.matt.financecontrol.model.entity.Subject;
@@ -21,11 +20,8 @@ public class SubjectValidator {
         this.subjectRepository = subjectRepository;
     }
 
-    public Subject encryptPassword(SubjectRecord subjectRecord) {
-        return new Subject(
-                subjectRecord,
-                new BCryptPasswordEncoder().encode(subjectRecord.password())
-        );
+    public Subject encryptPassword(Subject subject) {
+        return new Subject(subject, new BCryptPasswordEncoder().encode(subject.getPassword()));
     }
 
     @Transactional(readOnly = true)

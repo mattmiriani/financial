@@ -1,6 +1,5 @@
 package com.matt.financecontrol.model.entity;
 
-import com.matt.financecontrol.application.records.SubjectRecord;
 import com.matt.financecontrol.config.security.entity.Authority;
 import com.matt.financecontrol.config.security.entity.GroupAuthority;
 import jakarta.persistence.*;
@@ -24,7 +23,7 @@ import static java.util.Optional.ofNullable;
 @Setter
 @EqualsAndHashCode(of = "id")
 @ToString
-public class Subject implements UserDetails,Serializable {
+public class Subject implements UserDetails, Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -50,20 +49,20 @@ public class Subject implements UserDetails,Serializable {
     private String password;
 
     @Column(name = "active")
-    private boolean active;
+    private Boolean active;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_authority_id")
     private GroupAuthority groupAuthority;
 
-    public Subject(SubjectRecord subjectRecord, String password) {
-        this.name = subjectRecord.name();
-        this.username = subjectRecord.username();
-        this.email = subjectRecord.email();
-        this.phone = subjectRecord.phone();
+    public Subject(Subject subject, String password) {
+        this.name = subject.getName();
+        this.username = subject.getUsername();
+        this.email = subject.getEmail();
+        this.phone = subject.getPhone();
         this.password = password;
         this.active = true;
-        this.groupAuthority = subjectRecord.groupAuthority();
+        this.groupAuthority = subject.getGroupAuthority();
     }
 
     @Override

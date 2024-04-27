@@ -6,6 +6,7 @@ import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
 
 public class SpecificationUtil {
+
     private SpecificationUtil() {
     }
 

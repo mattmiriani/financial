@@ -5,10 +5,9 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+
+import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "group_authority")
@@ -35,9 +34,9 @@ public class GroupAuthority implements Serializable {
     private List<Authority> authorities = new ArrayList<>();
 
     public void mergeForUpdate(GroupAuthority groupAuthority) {
-        this.name = groupAuthority.getName();
+        this.name = ofNullable(groupAuthority.getName()).orElse(this.name);
 
-        groupAuthority.getAuthorities().stream()
+        ofNullable(groupAuthority.getAuthorities()).orElse(this.getAuthorities()).stream()
                 .filter(Objects::nonNull)
                 .peek(authority -> this.getAuthorities().clear())
                 .forEach(authority -> {

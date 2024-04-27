@@ -14,6 +14,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.UUID;
 
+import static java.util.Optional.ofNullable;
+
 @Entity
 @Table(name = "subject")
 @AllArgsConstructor
@@ -93,8 +95,8 @@ public class Subject implements UserDetails,Serializable {
     }
 
     public void mergeForUpdate(Subject subject) {
-        this.name = subject.getName();
-        this.phone = subject.getPhone();
-        this.groupAuthority = subject.getGroupAuthority();
+        this.name = ofNullable(subject.getName()).orElse(this.name);
+        this.phone = ofNullable(subject.getPhone()).orElse(this.phone);
+        this.groupAuthority = ofNullable(subject.getGroupAuthority()).orElse(this.groupAuthority);
     }
 }

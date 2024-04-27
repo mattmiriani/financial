@@ -25,6 +25,9 @@ spring:
     multipart:
       maxFileSize: -1
       maxRequestSize: -1
+  graphql:
+    graphiql:
+        enabled: true
 
 server:
   port: 8080

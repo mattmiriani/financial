@@ -1,0 +1,28 @@
+type Query {
+    findAllSubjects(subjectRecord: SubjectRecordInput, pageableRecord: PageableRecordInput): [Subject]!
+    findSubjectById(subjectId: ID!): Subject
+}
+
+type Mutation {
+    updateSubject(subject: SubjectRecordInput): Subject!
+}
+
+input SubjectRecordInput {
+    id: ID
+    name: String
+    username: String
+    email: String
+    phone: String
+    active: Boolean
+    groupAuthority: GroupAuthorityInput
+}
+
+type Subject {
+    id: ID!
+    name: String
+    username: String!
+    email: String!
+    phone: String
+    active: Boolean
+    groupAuthority: GroupAuthority!
+}

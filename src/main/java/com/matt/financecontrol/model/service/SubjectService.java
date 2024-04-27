@@ -66,7 +66,7 @@ public class SubjectService {
 
         subjectToUpdate.mergeForUpdate(subject);
 
-        return this.save(subject);
+        return this.save(subjectToUpdate);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)

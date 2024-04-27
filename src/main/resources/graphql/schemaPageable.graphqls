@@ -1,4 +1,4 @@
-input PageableRecordInput {
+input PageableInput {
     pageNumber: Int
     pageSize: Int
     sortField: String

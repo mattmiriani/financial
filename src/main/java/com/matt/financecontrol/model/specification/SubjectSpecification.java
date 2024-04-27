@@ -1,6 +1,5 @@
 package com.matt.financecontrol.model.specification;
 
-import com.matt.financecontrol.application.records.SubjectRecord;
 import com.matt.financecontrol.config.security.entity.GroupAuthority;
 import com.matt.financecontrol.model.entity.Subject;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,15 +26,15 @@ public class SubjectSpecification implements SpecificationDefault<Subject> {
         return (root, query, cb) -> cb.equal(root.join("groupAuthority").get("id"), groupAuthority.getId());
     }
 
-    public Specification<Subject> filter(SubjectRecord subjectRecord) {
+    public Specification<Subject> filter(Subject subject) {
         var builder = this.builder();
 
-        ofNullable(subjectRecord.name()).map(this::name).ifPresent(builder::and);
-        ofNullable(subjectRecord.username()).map(this::username).ifPresent(builder::and);
-        ofNullable(subjectRecord.email()).map(this::email).ifPresent(builder::and);
-        ofNullable(subjectRecord.phone()).map(this::phone).ifPresent(builder::and);
-        builder.and(this.isActive(subjectRecord.active()));
-        ofNullable(subjectRecord.groupAuthority()).map(this::groupAuthority).ifPresent(builder::and);
+        ofNullable(subject.getName()).map(this::name).ifPresent(builder::and);
+        ofNullable(subject.getUsername()).map(this::username).ifPresent(builder::and);
+        ofNullable(subject.getEmail()).map(this::email).ifPresent(builder::and);
+        ofNullable(subject.getPhone()).map(this::phone).ifPresent(builder::and);
+        ofNullable(subject.getActive()).map(this::isActive).ifPresent(builder::and);
+        ofNullable(subject.getGroupAuthority()).map(this::groupAuthority).ifPresent(builder::and);
 
         return builder.build();
     }

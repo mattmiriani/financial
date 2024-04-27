@@ -1,6 +1,5 @@
 package com.matt.financecontrol.application.controller;
 
-import com.matt.financecontrol.application.records.SubjectRecord;
 import com.matt.financecontrol.application.records.TokenRecord;
 import com.matt.financecontrol.config.security.service.TokenService;
 import com.matt.financecontrol.model.entity.Subject;
@@ -35,9 +34,9 @@ public class SubjectController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid SubjectRecord subjectRecord) {
+    public ResponseEntity<?> login(@RequestBody @Valid Subject subject) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(
-                subjectRecord.username(), subjectRecord.password()
+                subject.getUsername(), subject.getPassword()
         );
         var authentication = this.authenticationManager.authenticate(usernamePassword);
 
@@ -48,10 +47,10 @@ public class SubjectController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid SubjectRecord subjectRecord) {
-        var subject = this.subjectValidator.encryptPassword(subjectRecord);
+    public ResponseEntity<?> register(@RequestBody @Valid Subject subject) {
+        var subjectEncrypted = this.subjectValidator.encryptPassword(subject);
 
-        this.subjectService.create(subject);
+        this.subjectService.create(subjectEncrypted);
 
         return ResponseEntity.ok().build();
     }

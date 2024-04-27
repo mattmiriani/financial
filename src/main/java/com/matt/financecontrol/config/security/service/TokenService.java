@@ -5,30 +5,19 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.matt.financecontrol.config.FinanceControlBusinessException;
-import com.matt.financecontrol.config.properties.ApplicationProperties;
 import com.matt.financecontrol.model.entity.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import static java.util.Optional.ofNullable;
-
 @Service
 public class TokenService {
 
-    private final String KEY_API;
-
-    private final ApplicationProperties applicationProperties;
-
-    @Autowired
-    public TokenService(ApplicationProperties applicationProperties) {
-        this.applicationProperties = applicationProperties;
-
-        this.KEY_API = ofNullable(applicationProperties.getKeyApi()).orElse("secret");
-    }
+    @Value("${application.key-api}")
+    private String KEY_API;
 
     public String generateToken(Subject subject) {
         try {

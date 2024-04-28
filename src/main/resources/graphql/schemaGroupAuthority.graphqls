@@ -1,12 +1,3 @@
-type Query {
-    findGroupAuthorityById(groupAuthorityId: ID!): GroupAuthority!
-}
-
-type Mutation {
-    createGroupAuthority(groupAuthority: GroupAuthorityInput): GroupAuthority!
-    updateGroupAuthority(groupAuthority: GroupAuthorityInput): GroupAuthority!
-}
-
 input GroupAuthorityInput {
     id: ID
     name: String

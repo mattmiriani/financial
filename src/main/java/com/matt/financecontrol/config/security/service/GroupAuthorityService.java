@@ -3,7 +3,6 @@ package com.matt.financecontrol.config.security.service;
 import com.matt.financecontrol.config.FinanceControlBusinessException;
 import com.matt.financecontrol.config.security.entity.GroupAuthority;
 import com.matt.financecontrol.config.security.repository.GroupAuthorityRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

@@ -2,11 +2,11 @@ spring:
   application:
     name: finance-control
   datasource:
-    url: jdbc:postgresql://localhost:5432/finance-control
+    url: jdbc:postgresql://localhost:5432/finance
     # noinspection SpringBootApplicationYaml
     driver-class-name: org.postgresql.Driver
-    username: finance-control
-    password: finance-control
+    username: finance
+    password: finance
   jpa:
     properties.hibernate:
       generate_statistics: false
@@ -25,6 +25,12 @@ spring:
     multipart:
       maxFileSize: -1
       maxRequestSize: -1
+  graphql:
+    graphiql:
+        enabled: true
 
 server:
   port: 8080
+
+application:
+  key-api: "secret"

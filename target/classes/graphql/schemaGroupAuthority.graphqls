@@ -1,5 +1,5 @@
 input GroupAuthorityInput {
-    id: ID!
+    id: ID
     name: String
 }
 

@@ -1,6 +1,0 @@
-input PageableInput {
-    pageNumber: Int
-    pageSize: Int
-    sortField: String
-    sortDir: String
-}

@@ -1,12 +1,12 @@
 spring:
   application:
-    name: finance-control
+    name: financial
   datasource:
-    url: jdbc:postgresql://localhost:5432/finance
+    url: jdbc:postgresql://localhost:5432/financial
     # noinspection SpringBootApplicationYaml
     driver-class-name: org.postgresql.Driver
-    username: finance
-    password: finance
+    username: financial
+    password: financial
   jpa:
     properties.hibernate:
       generate_statistics: false
@@ -19,7 +19,7 @@ spring:
     open-in-view: true
     show-sql: false
   liquibase:
-    change-log: classpath:db/changelog/changeLog.finance-control.default.xml
+    change-log: classpath:db/changelog/changeLog.financial.default.xml
     default-schema: public
   servlet:
     multipart:

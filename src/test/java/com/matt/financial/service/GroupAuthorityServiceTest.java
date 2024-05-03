@@ -1,10 +1,10 @@
-package com.matt.financecontrol.service;
+package com.matt.financial.service;
 
-import com.matt.financecontrol.config.FinanceControlBusinessException;
-import com.matt.financecontrol.config.security.entity.Authority;
-import com.matt.financecontrol.config.security.entity.GroupAuthority;
-import com.matt.financecontrol.config.security.repository.GroupAuthorityRepository;
-import com.matt.financecontrol.config.security.service.GroupAuthorityService;
+import com.matt.financial.config.FinancialBusinessException;
+import com.matt.financial.config.security.entity.Authority;
+import com.matt.financial.config.security.entity.GroupAuthority;
+import com.matt.financial.config.security.repository.GroupAuthorityRepository;
+import com.matt.financial.config.security.service.GroupAuthorityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ class GroupAuthorityServiceTest {
         when(this.groupAuthorityRepository.findById(this.groupAuthorityId))
                 .thenReturn(Optional.empty());
 
-        assertThrows(FinanceControlBusinessException.class, () -> {
+        assertThrows(FinancialBusinessException.class, () -> {
             this.groupAuthorityService.findById(this.groupAuthorityId);
         });
         verify(this.groupAuthorityRepository, times(1)).findById(this.groupAuthorityId);

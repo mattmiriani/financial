@@ -1,7 +1,7 @@
-package com.matt.financecontrol.application.graphqlcontroller;
+package com.matt.financial.application.graphqlcontroller;
 
-import com.matt.financecontrol.config.security.entity.GroupAuthority;
-import com.matt.financecontrol.config.security.service.GroupAuthorityService;
+import com.matt.financial.config.security.entity.GroupAuthority;
+import com.matt.financial.config.security.service.GroupAuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

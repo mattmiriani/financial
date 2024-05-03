@@ -9,12 +9,12 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.matt</groupId>
-	<artifactId>finance-control</artifactId>
+	<artifactId>financial</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>finance-control</name>
-	<description>Individual finance control</description>
+	<name>financial</name>
+	<description>personal finance app</description>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

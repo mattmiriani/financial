@@ -1,4 +1,4 @@
-# 💸 Finance Control 💸
+# 💸 Financial 💸
 
 ## Introduction
 

@@ -4,8 +4,8 @@ import com.matt.financial.config.FinancialBusinessException;
 import com.matt.financial.model.entity.Subject;
 import com.matt.financial.model.repository.SubjectRepository;
 import com.matt.financial.model.specification.SubjectSpecification;
-import com.matt.financial.validations.SubjectValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.matt.financial.strategy.factory.SubjectFactory;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,47 +14,43 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import static com.matt.financial.model.enumerations.Operation.*;
+import static java.util.Optional.ofNullable;
+
 @Service
+@AllArgsConstructor
 public class SubjectService {
 
     private final SubjectSpecification subjectSpecification;
     private final SubjectRepository subjectRepository;
-    private final SubjectValidator subjectValidator;
-
-    @Autowired
-    public SubjectService(SubjectSpecification subjectSpecification,SubjectRepository subjectRepository,
-                          SubjectValidator subjectValidator) {
-        this.subjectSpecification = subjectSpecification;
-        this.subjectRepository = subjectRepository;
-        this.subjectValidator = subjectValidator;
-    }
+    private final SubjectFactory subjectFactory;
 
     @Transactional(readOnly = true)
     public Page<Subject> findAll(Subject subject, Pageable pageable) {
-        return this.subjectRepository.findAll(
-                this.subjectSpecification.filter(subject),
-                pageable
-        );
+        return subjectRepository.findAll(subjectSpecification.filter(subject), pageable);
     }
 
     @Transactional(readOnly = true)
     public Subject findById(UUID subjectId) {
-        return this.subjectRepository.findById(subjectId)
-                .orElseThrow(() -> new FinancialBusinessException("Subject not found"));
+        return subjectRepository.findById(subjectId).orElseThrow(
+                () -> new FinancialBusinessException("Subject not found")
+        );
     }
 
     @Transactional(readOnly = true)
     public Subject findByUsername(String username) {
-        return (Subject) this.subjectRepository.findSubjectByUsername(username);
+        return (Subject) ofNullable(subjectRepository.findSubjectByUsername(username)).orElseThrow(
+                () -> new FinancialBusinessException("Subject not found")
+        );
     }
 
     private Subject save(Subject subject) {
-        return this.subjectRepository.save(subject);
+        return subjectRepository.save(subject);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Subject create(Subject subject) {
-        this.subjectValidator.existsByUsername(subject.getUsername());
+        subjectFactory.getValidation(CREATE).execute(subject);
 
         return this.save(subject);
     }
@@ -63,6 +59,8 @@ public class SubjectService {
     public Subject update(Subject subject) {
         var subjectToUpdate = this.findById(subject.getId());
 
+        subjectFactory.getValidation(UPDATE).execute(subject);
+
         subjectToUpdate.mergeForUpdate(subject);
 
         return this.save(subjectToUpdate);
@@ -70,29 +68,23 @@ public class SubjectService {
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Subject updateToUsername(Subject subject, String newUsername) {
-        var subjectToUpdate = this.findById(subject.getId());
+        subject.setUsername(newUsername);
 
-        this.subjectValidator.existsByUsername(newUsername);
-
-        subjectToUpdate.setUsername(newUsername);
-
-        return this.save(subjectToUpdate);
+        return this.update(subject);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Subject updateToEmail(Subject subject, String newEmail) {
-        var subjectToUpdate = this.findById(subject.getId());
+        subject.setEmail(newEmail);
 
-        this.subjectValidator.existsByEmail(newEmail);
-
-        subjectToUpdate.setEmail(newEmail);
-
-        return this.save(subjectToUpdate);
+        return this.update(subject);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public boolean activateOrDeactivate(UUID subjectId) {
         var subjectToUpdate = this.findById(subjectId);
+
+        subjectFactory.getValidation(DELETE).execute(subjectToUpdate);
 
         subjectToUpdate.setActive(!subjectToUpdate.getActive());
 

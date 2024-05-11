@@ -42,7 +42,7 @@ class GroupAuthorityServiceTest {
 
     @Test
     @DisplayName("Test find by id")
-    void testFindByIdSuccess() {
+    void findByIdSuccess() {
         when(this.groupAuthorityRepository.findById(this.groupAuthorityId))
                 .thenReturn(Optional.of(newGroupAuthority));
 
@@ -54,7 +54,7 @@ class GroupAuthorityServiceTest {
 
     @Test
     @DisplayName("Test find by id throws")
-    void testFindByIdThrows() {
+    void findByIdThrows() {
         when(this.groupAuthorityRepository.findById(this.groupAuthorityId))
                 .thenReturn(Optional.empty());
 

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -33,23 +34,26 @@ public class Subject implements UserDetails, Serializable {
     @GeneratedValue(generator = "UUID_V1")
     private UUID id;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "active")
-    private Boolean active;
+    @Column(name = "active", nullable = false)
+    private Boolean active = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_authority_id")
@@ -95,6 +99,8 @@ public class Subject implements UserDetails, Serializable {
 
     public void mergeForUpdate(Subject subject) {
         this.name = ofNullable(subject.getName()).orElse(this.name);
+        this.username = ofNullable(subject.getUsername()).orElse(this.username);
+        this.email = ofNullable(subject.getEmail()).orElse(this.email);
         this.phone = ofNullable(subject.getPhone()).orElse(this.phone);
         this.groupAuthority = ofNullable(subject.getGroupAuthority()).orElse(this.groupAuthority);
     }

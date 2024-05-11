@@ -25,6 +25,9 @@
             <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
                 <constraints nullable="false"/>
             </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
@@ -46,6 +49,8 @@
             </column>
         </createTable>
         <addPrimaryKey tableName="subject" columnNames="id" constraintName="subject_PKEY"/>
+        <addUniqueConstraint tableName="subject" columnNames="username" constraintName="subject_username_UNK"/>
+        <addUniqueConstraint tableName="subject" columnNames="email" constraintName="subject_email_UNK"/>
 
         <addForeignKeyConstraint baseTableName="subject" baseColumnNames="group_authority_id"
                                  constraintName="subject_group_authority_FK"

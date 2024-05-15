@@ -1,11 +1,11 @@
-package com.matt.financial.validations;
+package com.matt.financial.config.tools;
 
 import java.text.Normalizer;
 
 import static java.util.Objects.isNull;
 import static java.util.Optional.ofNullable;
 
-public class StringValidator {
+public class StringTools {
 
     public static String removeAccentLower(String string) {
         return removeAccent(string).toLowerCase();

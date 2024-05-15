@@ -1,7 +1,7 @@
 package com.matt.financial.model.specification;
 
 import com.matt.financial.config.FinancialBusinessException;
-import com.matt.financial.validations.StringValidator;
+import com.matt.financial.config.tools.StringTools;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.io.Serializable;
@@ -30,7 +30,7 @@ public interface SpecificationDefault<T extends Serializable> {
 
     default Specification<T> name(String name) {
         return (root, query, cb) -> cb.like(cb.function("unaccent", String.class, cb.lower(root.get("name"))),
-                "%" + StringValidator.removeAccentLower(name) + "%");
+                "%" + StringTools.removeAccentLower(name) + "%");
     }
 
     default Specification<T> isActive(Boolean active) {

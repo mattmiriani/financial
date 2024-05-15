@@ -1,6 +1,6 @@
 package com.matt.financial.model.specification;
 
-import com.matt.financial.validations.StringValidator;
+import com.matt.financial.config.tools.StringTools;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Path;
@@ -15,6 +15,6 @@ public class SpecificationUtil {
     }
 
     public static String prepareStringForLike(String s) {
-        return "%" + StringValidator.removeAccentLower(s) + "%";
+        return "%" + StringTools.removeAccentLower(s) + "%";
     }
 }

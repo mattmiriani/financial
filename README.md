@@ -1,27 +1,41 @@
-# 💸 Financial 💸
+# Financial API
 
-## Introduction
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)
 
 This project aims to provide a practical and efficient solution for organizing individual or family finances. With this
 application, users will be able to monitor their expenses, income, savings goals, and financial planning in a simple 
 and intuitive way.
 
-## Technologies Used
+This project is an API built using Spring Boot, Java, GraphQL and PostgresSQL as the database.
 
-### Backend
-- Java
-- Spring Boot
-- GraphQL
+## Table of Contents
 
-### Database
-- PostgreSQL (Driver)
-- Liquibase Core
-- Hibernate
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Documentation](#Api-Documentation)
 
-## About the Project
+## Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/mattmiriani/financial.git
+```
+2. Install dependencies:
+```bash
+mvn install
+```
+3. Install [PostgresSQL](https://www.postgresql.org/download/).
 
-The project was conceived based on a financial control spreadsheet; through it, I decided to study more about the 
-technology I currently work with, refining concepts and learning new things. It is being applied here in my individual
-test, to later be taken to a formal environment, with a more structured concept of what I am using.
+## Configuration
+- Create a user and database with the name "financial" and the user must contain the password "financial".
 
-# 🚀
+## Usage
+1. Start the application
+2. The API will be accessible at [Panel GraphQL](http://localhost:8080/graphiql) with a valid token.
+
+## Api Documentation
+- Documentation is available on my project page at [Documentation](https://mattmiriani.notion.site/Projeto-Financial-1a0d1e7059344953b407d52891b86ca2?pvs=74).

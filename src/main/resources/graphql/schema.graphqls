@@ -5,6 +5,10 @@ type Query {
 
 #    GroupAuthority
     findGroupAuthorityById(groupAuthorityId: ID!): GroupAuthority!
+
+#   Workspace
+    findAllWorkspaces(workspace: WorkspaceInput, pageableRecord: PageableInput): [Workspace]!
+    findWorkspaceById(workspaceId: ID!): Workspace!
 }
 
 type Mutation {
@@ -17,4 +21,9 @@ type Mutation {
 #    GroupAuthority
     createGroupAuthority(groupAuthority: GroupAuthorityInput): GroupAuthority!
     updateGroupAuthority(groupAuthority: GroupAuthorityInput): GroupAuthority!
+
+#   Workspace
+    createWorkspace(workspace: WorkspaceInput): Workspace!
+    updateWorkspace(workspace: WorkspaceInput): Workspace!
+    activateOrDeactivateWorkspace(workspaceId: ID!): Boolean!
 }

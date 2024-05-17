@@ -1,6 +1,7 @@
 package com.matt.financial.strategy.factory;
 
-import com.matt.financial.model.entity.Subject;
+import com.matt.financial.config.FinancialBusinessException;
+import com.matt.financial.model.entity.Workspace;
 import com.matt.financial.model.enumerations.Operation;
 import com.matt.financial.strategy.Validation;
 import org.springframework.stereotype.Component;
@@ -12,19 +13,19 @@ import java.util.Set;
 import static java.util.Objects.isNull;
 
 @Component
-public class SubjectFactory {
+public class WorkspaceFactory {
 
-    private final Map<Operation, Validation<Subject>> validations = new HashMap<>();
+    private final Map<Operation, Validation<Workspace>> validations = new HashMap<>();
 
-    public SubjectFactory(Set<Validation<Subject>> validations) {
+    public WorkspaceFactory(Set<Validation<Workspace>> validations) {
         validations.forEach(validation -> this.validations.put(validation.getOperation(), validation));
     }
 
-    public Validation<Subject> getValidation(Operation operation) {
+    public Validation<Workspace> getValidation(Operation operation) {
         var validation = validations.get(operation);
 
         if (isNull(validation)) {
-            throw new IllegalArgumentException("Operation not supported");
+            throw new FinancialBusinessException("Operation not supported");
         }
 
         return validation;

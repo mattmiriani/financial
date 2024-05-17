@@ -84,4 +84,66 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="20240516224000" author="Matheus">
+        <createTable tableName="workspace">
+            <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+            <column name="workspace_type" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject_id" type="${uuid_type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="workspace" columnNames="id" constraintName="workspace_PKEY"/>
+
+        <addForeignKeyConstraint baseTableName="workspace" baseColumnNames="subject_id"
+                                 constraintName="workspace_subject_FK"
+                                 referencedTableName="subject"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="workspace" indexName="workspace_subject_IDX">
+            <column name="subject_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20240516224500" author="Matheus">
+        <createTable tableName="month">
+            <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="${uuid_type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="month" columnNames="id" constraintName="month_PKEY"/>
+
+        <addForeignKeyConstraint baseTableName="month" baseColumnNames="workspace_id"
+                                 constraintName="month_workspace_FK"
+                                 referencedTableName="workspace"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="month" indexName="month_workspace_IDX">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

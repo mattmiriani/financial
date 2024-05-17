@@ -1,0 +1,18 @@
+input WorkspaceInput {
+    id: ID
+    name: String
+    description: String
+    workspaceType: String
+    subject: SubjectInput
+    active: Boolean
+}
+
+type Workspace {
+    id: ID
+    createdAt: String
+    name: String
+    description: String
+    workspaceType: String
+    subject: Subject
+    active: Boolean
+}

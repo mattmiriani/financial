@@ -12,7 +12,7 @@ import static java.util.Objects.nonNull;
 
 @Service
 @AllArgsConstructor
-public class SubjectUpdate implements Validation {
+public class SubjectUpdate implements Validation<Subject> {
 
     private final SubjectRepository subjectRepository;
 

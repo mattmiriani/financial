@@ -84,8 +84,6 @@ public class SubjectService {
     public boolean activateOrDeactivate(UUID subjectId) {
         var subjectToUpdate = this.findById(subjectId);
 
-        subjectFactory.getValidation(DELETE).execute(subjectToUpdate);
-
         subjectToUpdate.setActive(!subjectToUpdate.getActive());
 
         return this.save(subjectToUpdate).getActive();

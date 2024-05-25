@@ -12,12 +12,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "month")
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
-@ToString
+@Data
 public class Month implements Serializable {
 
     @Serial

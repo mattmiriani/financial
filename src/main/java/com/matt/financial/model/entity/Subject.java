@@ -18,12 +18,8 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "subject")
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
-@ToString
 public class Subject implements UserDetails, Serializable {
 
     @Serial

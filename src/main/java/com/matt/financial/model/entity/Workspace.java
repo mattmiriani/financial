@@ -14,12 +14,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "workspace")
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
-@ToString
+@Data
 public class Workspace implements Serializable {
 
     @Serial
@@ -51,13 +46,16 @@ public class Workspace implements Serializable {
     private Subject subject;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Month> month;
+    private List<Month> months;
+
+    @Transient
+    private List<Integer> monthsList;
 
     public void mergeForUpdate(Workspace workspace) {
         this.name = ofNullable(workspace.getName()).orElse(this.name);
         this.description = ofNullable(workspace.getDescription()).orElse(this.description);
         this.workspaceType = ofNullable(workspace.getWorkspaceType()).orElse(this.workspaceType);
         this.active = ofNullable(workspace.getActive()).orElse(this.active);
-        this.month = ofNullable(workspace.getMonth()).orElse(this.month);
+        this.months = ofNullable(workspace.getMonths()).orElse(this.months);
     }
 }

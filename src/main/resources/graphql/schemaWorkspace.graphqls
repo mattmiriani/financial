@@ -2,9 +2,10 @@ input WorkspaceInput {
     id: ID
     name: String
     description: String
-    workspaceType: String
+    workspaceType: WorkspaceType!
     subject: SubjectInput
     active: Boolean
+    monthsList: [Int]
 }
 
 type Workspace {
@@ -12,7 +13,23 @@ type Workspace {
     createdAt: String
     name: String
     description: String
-    workspaceType: String
-    subject: Subject
+    workspaceType: WorkspaceType
     active: Boolean
+    subject: Subject
+    months: [Month]
+}
+
+type Month {
+    id: ID
+    createdAt: String
+    name: String
+    active: Boolean
+    workspace: Workspace
+}
+
+enum WorkspaceType {
+    YEARLY
+    TRIMESTER
+    FOUR_MONTH
+    CUSTOM
 }

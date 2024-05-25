@@ -35,7 +35,7 @@ mvn install
 
 ## Usage
 1. Start the application
-2. The API will be accessible at [Panel GraphQL](http://localhost:8080/graphiql) with a valid token.
+2. The API will be accessible at [GraphQL Panel](http://localhost:8080/graphiql) with a valid token.
 
 ## Api Documentation
 - Documentation is available on my project page at [Documentation](https://mattmiriani.notion.site/Projeto-Financial-1a0d1e7059344953b407d52891b86ca2?pvs=74).

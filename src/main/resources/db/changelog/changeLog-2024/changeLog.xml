@@ -41,7 +41,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="password" type="varchar"/>
-            <column name="active" type="boolean" defaultValue="false">
+            <column name="active" type="boolean" defaultValue="true">
                 <constraints nullable="false"/>
             </column>
             <column name="group_authority_id" type="${uuid_type}">
@@ -99,7 +99,7 @@
             <column name="workspace_type" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="active" type="boolean" defaultValue="false">
+            <column name="active" type="boolean" defaultValue="true">
                 <constraints nullable="false"/>
             </column>
             <column name="subject_id" type="${uuid_type}">
@@ -128,7 +128,10 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="active" type="boolean" defaultValue="false">
+            <column name="amount" type="numeric(12,2)" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValue="true">
                 <constraints nullable="false"/>
             </column>
             <column name="workspace_id" type="${uuid_type}">
@@ -143,6 +146,43 @@
                                  referencedColumnNames="id"/>
         <createIndex tableName="month" indexName="month_workspace_IDX">
             <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20240525095800" author="Matheus">
+        <createTable tableName="invoice">
+            <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="value" type="numeric(12,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="month_id" type="${uuid_type}"/>
+            <column name="subject_id" type="${uuid_type}"/>
+        </createTable>
+        <addPrimaryKey tableName="invoice" columnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="invoice" baseColumnNames="month_id"
+                                 constraintName="invoice_month_FK"
+                                 referencedTableName="month"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="invoice" indexName="invoice_month_IDX">
+            <column name="month_id"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseTableName="invoice" baseColumnNames="subject_id"
+                                 constraintName="invoice_subject_FK"
+                                 referencedTableName="subject"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="invoice" indexName="invoice_subject_IDX">
+            <column name="subject_id"/>
         </createIndex>
     </changeSet>
 

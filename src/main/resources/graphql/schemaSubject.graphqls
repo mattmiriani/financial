@@ -9,11 +9,11 @@ input SubjectInput {
 }
 
 type Subject {
-    id: ID!
+    id: ID
     name: String
-    username: String!
-    email: String!
+    username: String
+    email: String
     phone: String
     active: Boolean
-    groupAuthority: GroupAuthority!
+    groupAuthority: GroupAuthority
 }

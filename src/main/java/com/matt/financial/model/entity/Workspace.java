@@ -2,11 +2,12 @@ package com.matt.financial.model.entity;
 
 import com.matt.financial.model.enumerations.WorkspaceType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,25 +29,25 @@ public class Workspace implements Serializable {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "workspace_type")
+    @Column(name = "workspace_type", nullable = false)
     private WorkspaceType workspaceType;
 
-    @Column(name = "active")
-    private Boolean active = true;
+    @Column(name = "active", nullable = false)
+    private Boolean active = Boolean.TRUE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id", nullable = false, updatable = false)
     private Subject subject;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Month> months;
+    private List<Month> months = new ArrayList<>();
 
     @Transient
     private List<Integer> monthsList;

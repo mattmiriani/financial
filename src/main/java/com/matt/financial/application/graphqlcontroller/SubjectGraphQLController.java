@@ -3,6 +3,7 @@ package com.matt.financial.application.graphqlcontroller;
 import com.matt.financial.application.records.PageableRecord;
 import com.matt.financial.model.entity.Subject;
 import com.matt.financial.model.service.SubjectService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -13,14 +14,10 @@ import org.springframework.stereotype.Controller;
 import java.util.UUID;
 
 @Controller
+@AllArgsConstructor
 public class SubjectGraphQLController {
 
     private final SubjectService subjectService;
-
-    @Autowired
-    public SubjectGraphQLController(SubjectService subjectService) {
-        this.subjectService = subjectService;
-    }
 
     @QueryMapping
     public Page<Subject> findAllSubjects(@Argument Subject subject,

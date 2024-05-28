@@ -1,6 +1,6 @@
 package com.matt.financial.strategy.factory;
 
-import com.matt.financial.model.entity.Subject;
+import com.matt.financial.model.entity.Invoice;
 import com.matt.financial.model.enumerations.Operation;
 import com.matt.financial.strategy.Validation;
 import org.springframework.stereotype.Component;
@@ -12,15 +12,15 @@ import java.util.Set;
 import static java.util.Objects.isNull;
 
 @Component
-public class SubjectFactory {
+public class InvoiceFactory {
 
-    private final Map<Operation, Validation<Subject>> validations = new HashMap<>();
+    private final Map<Operation, Validation<Invoice>> validations = new HashMap<>();
 
-    public SubjectFactory(Set<Validation<Subject>> validations) {
+    public InvoiceFactory(Set<Validation<Invoice>> validations) {
         validations.forEach(validation -> this.validations.put(validation.getOperation(), validation));
     }
 
-    public Validation<Subject> getValidation(Operation operation) {
+    public Validation<Invoice> getValidation(Operation operation) {
         var validation = validations.get(operation);
 
         if (isNull(validation)) {

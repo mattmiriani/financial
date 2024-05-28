@@ -4,6 +4,6 @@ input GroupAuthorityInput {
 }
 
 type GroupAuthority {
-    id: ID!
+    id: ID
     name: String
 }

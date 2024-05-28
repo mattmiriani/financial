@@ -3,7 +3,9 @@ package com.matt.financial.model.entity;
 import com.matt.financial.config.security.entity.Authority;
 import com.matt.financial.config.security.entity.GroupAuthority;
 import jakarta.persistence.*;
-import lombok.*;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,12 +20,8 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "subject")
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
-@ToString
 public class Subject implements UserDetails, Serializable {
 
     @Serial
@@ -53,7 +51,7 @@ public class Subject implements UserDetails, Serializable {
     private String password;
 
     @Column(name = "active", nullable = false)
-    private Boolean active = false;
+    private Boolean active = Boolean.TRUE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "group_authority_id")

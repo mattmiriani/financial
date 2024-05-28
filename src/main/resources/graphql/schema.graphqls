@@ -5,6 +5,18 @@ type Query {
 
 #    GroupAuthority
     findGroupAuthorityById(groupAuthorityId: ID!): GroupAuthority!
+
+#   Workspace
+    findAllWorkspaces(workspace: WorkspaceInput, pageableRecord: PageableInput): [Workspace]!
+    findWorkspaceById(workspaceId: ID!): Workspace!
+
+#   Invoice
+    findAllInvoice(invoice: InvoiceInput, pageableRecord: PageableInput): [Invoice]!
+    findInvoiceById(invoiceId: ID!): Invoice!
+
+#   Month
+    findAllMonth(month: MonthInput, pageableRecord: PageableInput): [Month]!
+    findMonthById(monthId: ID!): Month!
 }
 
 type Mutation {
@@ -17,4 +29,14 @@ type Mutation {
 #    GroupAuthority
     createGroupAuthority(groupAuthority: GroupAuthorityInput): GroupAuthority!
     updateGroupAuthority(groupAuthority: GroupAuthorityInput): GroupAuthority!
+
+#   Workspace
+    createWorkspace(workspace: WorkspaceInput): Workspace!
+    updateWorkspace(workspace: WorkspaceInput): Workspace!
+    activateOrDeactivateWorkspace(workspaceId: ID!): Boolean!
+
+#   Invoice
+    createInvoice(invoice: InvoiceInput): Invoice!
+    updateInvoice(invoice: InvoiceInput): Invoice!
+    activateOrDeactivateInvoice(invoiceId: ID!): Boolean!
 }

@@ -28,13 +28,14 @@ public class SubjectSpecification implements SpecificationDefault<Subject> {
 
     public Specification<Subject> filter(Subject subject) {
         var builder = this.builder();
+        var subjectOptional = ofNullable(subject);
 
-        ofNullable(subject.getName()).map(this::name).ifPresent(builder::and);
-        ofNullable(subject.getUsername()).map(this::username).ifPresent(builder::and);
-        ofNullable(subject.getEmail()).map(this::email).ifPresent(builder::and);
-        ofNullable(subject.getPhone()).map(this::phone).ifPresent(builder::and);
-        ofNullable(subject.getActive()).map(this::isActive).ifPresent(builder::and);
-        ofNullable(subject.getGroupAuthority()).map(this::groupAuthority).ifPresent(builder::and);
+        subjectOptional.map(Subject::getName).map(this::name).ifPresent(builder::and);
+        subjectOptional.map(Subject::getUsername).map(this::username).ifPresent(builder::and);
+        subjectOptional.map(Subject::getEmail).map(this::email).ifPresent(builder::and);
+        subjectOptional.map(Subject::getPhone).map(this::phone).ifPresent(builder::and);
+        subjectOptional.map(Subject::getActive).map(this::isActive).ifPresent(builder::and);
+        subjectOptional.map(Subject::getGroupAuthority).map(this::groupAuthority).ifPresent(builder::and);
 
         return builder.build();
     }

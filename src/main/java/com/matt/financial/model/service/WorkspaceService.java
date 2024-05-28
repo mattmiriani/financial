@@ -6,6 +6,7 @@ import com.matt.financial.model.repository.WorkspaceRepository;
 import com.matt.financial.model.specification.WorkspaceSpecification;
 import com.matt.financial.strategy.factory.WorkspaceFactory;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import static com.matt.financial.model.enumerations.Operation.CREATE;
 import static com.matt.financial.model.enumerations.Operation.UPDATE;
 
 @Service
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Lazy))
 public class WorkspaceService {
 
     private final WorkspaceSpecification workspaceSpecification;

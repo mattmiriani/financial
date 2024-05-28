@@ -9,11 +9,13 @@ import java.util.ArrayList;
 
 public class WorkspaceTypeTrimester implements WorkspaceTypeProcessor {
 
+    private static final Integer TRIMESTER = 3;
+
     @Override
     public void process(Workspace workspace) {
         var months = new ArrayList<Month>();
         var initialMonth = LocalDate.now().getMonth().ordinal();
-        var finalMonth = LocalDate.now().getMonth().plus(3).ordinal();
+        var finalMonth = LocalDate.now().getMonth().plus(TRIMESTER).ordinal();
 
         this.process(months, workspace, initialMonth, finalMonth);
     }

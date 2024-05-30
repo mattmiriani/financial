@@ -40,7 +40,7 @@ public class InvoiceGraphQLController {
     }
 
     @MutationMapping
-    public Invoice activateOrDeactivateInvoice(@Argument Invoice invoice) {
+    public Boolean activateOrDeactivateInvoice(@Argument Invoice invoice) {
         return invoiceService.activateOrDeactivate(invoice);
     }
 }

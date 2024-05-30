@@ -5,11 +5,18 @@ import com.matt.financial.model.entity.Subject;
 import com.matt.financial.model.repository.SubjectRepository;
 import com.matt.financial.model.service.SubjectService;
 import com.matt.financial.model.specification.SubjectSpecification;
+import com.matt.financial.strategy.Validation;
+import com.matt.financial.strategy.factory.SubjectFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
@@ -17,103 +24,280 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.matt.financial.model.enumerations.Operation.CREATE;
+import static com.matt.financial.model.enumerations.Operation.UPDATE;
 import static java.util.Optional.ofNullable;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
 class SubjectServiceTest {
 
-    private final UUID subjectId = UUID.randomUUID();
+    private final static UUID workspaceId = UUID.randomUUID();
 
     @Mock
     private SubjectRepository subjectRepository;
     @Mock
     private SubjectSpecification subjectSpecification;
+    @Mock
+    private SubjectFactory subjectFactory;
+    @Mock
+    private Validation<Subject> validation;
+
     @InjectMocks
     private SubjectService subjectService;
 
     @BeforeEach
-    void setup() {
-        MockitoAnnotations.initMocks(this);
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void findAll() {
+    @Nested
+    class findAllSubject {
+
+        @Test
+        void findAllSuccess() {
+            var subjects = createListSubjects(5L);
+            var pageable = Mockito.mock(Pageable.class);
+            var subjectFilter = new Subject();
+            var subjectPage = new PageImpl<>(subjects);
+
+            Specification<Subject> mockSpecification = (Specification<Subject>) (root, query, criteriaBuilder) -> null;
+            doReturn(mockSpecification).when(subjectSpecification).filter(subjectFilter);
+            doReturn(subjectPage).when(subjectRepository).findAll(eq(mockSpecification), eq(pageable));
+
+            var result = subjectService.findAll(subjectFilter, pageable);
+
+            assertNotNull(result);
+            assertEquals(subjects, result.getContent());
+            verify(subjectSpecification, times(1)).filter(subjectFilter);
+            verify(subjectRepository, times(1)).findAll(eq(mockSpecification), eq(pageable));
+        }
+
+        @Test
+        void findAllSuccessIsEmpty() {
+            var pageable = Mockito.mock(Pageable.class);
+            var subjectFilter = new Subject();
+            var subjectPage = new PageImpl<>(new ArrayList<>());
+
+            Specification<Subject> mockSpecification = (Specification<Subject>) (root, query, criteriaBuilder) -> null;
+            doReturn(mockSpecification).when(subjectSpecification).filter(subjectFilter);
+            doReturn(subjectPage).when(subjectRepository).findAll(eq(mockSpecification), eq(pageable));
+
+            var result = subjectService.findAll(subjectFilter, pageable);
+
+            assertNotNull(result);
+            assertEquals(new ArrayList<>(), result.getContent());
+            verify(subjectSpecification, times(1)).filter(subjectFilter);
+            verify(subjectRepository, times(1)).findAll(eq(mockSpecification), eq(pageable));
+        }
     }
 
-    @Test
-    void findByIdSuccess() {
-        var subject = this.createListSubjects(1L).get(0);
-        subject.setId(this.subjectId);
+    @Nested
+    class findByIdSubject {
+        @Test
+        void findByIdSuccess() {
+            var subject = createListSubjects(1L).getFirst();
+            subject.setId(workspaceId);
+            doReturn(Optional.of(subject))
+                    .when(subjectRepository)
+                    .findById(workspaceId);
 
-        when(this.subjectRepository.findById(this.subjectId))
-                .thenReturn(Optional.of(subject));
+            var result = subjectService.findById(workspaceId);
 
-        var result = this.subjectService.findById(this.subjectId);
+            assertEquals(subject, result);
+            verify(subjectRepository, times(1)).findById(workspaceId);
+        }
 
-        assertEquals(subject, result);
-        verify(this.subjectRepository, times(1)).findById(this.subjectId);
+        @Test
+        void findByIdThrows() {
+            doReturn(Optional.empty())
+                    .when(subjectRepository)
+                    .findById(workspaceId);
+
+            assertThrows(FinancialBusinessException.class,
+                    () -> subjectService.findById(workspaceId)
+            );
+            verify(subjectRepository, times(1)).findById(workspaceId);
+        }
     }
 
-    @Test
-    void findByIdThrows() {
-        when(this.subjectRepository.findById(this.subjectId))
-                .thenReturn(Optional.empty());
+    @Nested
+    class findByUsernameSubject {
 
-        assertThrows(FinancialBusinessException.class, () -> {
-            this.subjectService.findById(this.subjectId);
-        });
-        verify(this.subjectRepository, times(1)).findById(this.subjectId);
+        @Test
+        void findByUsernameSuccess() {
+            var subject = createListSubjects(1L).getFirst();
+            var username = "testeUsername";
+            subject.setUsername(username);
+
+            doReturn(subject).when(subjectRepository)
+                    .findSubjectByUsername(username);
+
+            var result = subjectService.findByUsername(username);
+
+            assertEquals(subject, result);
+            verify(subjectRepository, times(1)).findSubjectByUsername(username);
+        }
+
+        @Test
+        void findByUsernameThrows() {
+            var username = "testeUsername";
+
+            doReturn(null).when(subjectRepository)
+                    .findSubjectByUsername(username);
+
+            assertThrows(FinancialBusinessException.class, () ->
+                    subjectService.findByUsername(username)
+            );
+            verify(subjectRepository, times(1)).findSubjectByUsername(username);
+        }
     }
 
-    @Test
-    void findByUsernameSuccess() {
-        var subject = this.createListSubjects(1L).get(0);
-        var username = "testeUsername";
-        subject.setUsername(username);
+    @Nested
+    class findByEmailSubject {
 
-        when(this.subjectRepository.findSubjectByUsername(username))
-                .thenReturn(subject);
+        @Test
+        void findByEmailSubjectSuccess() {
+            var subject = createListSubjects(1L).getFirst();
+            var email = "email@email.email";
+            subject.setUsername(email);
 
-        var result = this.subjectService.findByUsername(username);
+            doReturn(subject).when(subjectRepository)
+                    .findByEmail(email);
 
-        assertEquals(subject, result);
-        verify(this.subjectRepository, times(1)).findSubjectByUsername(username);
+            var result = subjectService.findByEmail(email);
+
+            assertEquals(subject, result);
+            verify(subjectRepository, times(1)).findByEmail(email);
+        }
+
+        @Test
+        void findByEmailSubjectThrows() {
+            var email = "email@email.email";
+
+            doReturn(null).when(subjectRepository)
+                    .findByEmail(email);
+
+            assertThrows(FinancialBusinessException.class, () ->
+                    subjectService.findByEmail(email)
+            );
+            verify(subjectRepository, times(1)).findByEmail(email);
+        }
     }
 
-    @Test
-    void findByUsernameThrows() {
-        var username = "testeUsername";
+    @Nested
+    class createSubject {
 
-        when(this.subjectRepository.findSubjectByUsername(username))
-                .thenReturn(null);
+        @Test
+        void testCreateSubject() {
+            var subject = createListSubjects(1L).getFirst();
+            subject.setId(workspaceId);
 
-        assertThrows(FinancialBusinessException.class, () -> {
-            this.subjectService.findByUsername(username);
-        });
-        verify(this.subjectRepository, times(1)).findSubjectByUsername(username);
+            when(subjectFactory.getValidation(CREATE)).thenReturn(validation);
+            doNothing().when(validation).execute(subject);
+            doReturn(subject).when(subjectRepository).save(subject);
+
+            var result = subjectService.create(subject);
+
+            verify(subjectFactory).getValidation(CREATE);
+            verify(validation).execute(subject);
+            verify(subjectRepository).save(subject);
+            assertEquals(subject, result);
+        }
     }
 
-    @Test
-    void create() {
+    @Nested
+    class updateSubject {
+
+        @Test
+        void testUpdateSubject() {
+            var subject = createListSubjects(1L).getFirst();
+            subject.setId(workspaceId);
+            subject.setName("oldName");
+
+            doReturn(Optional.of(subject)).when(subjectRepository).findById(workspaceId);
+
+            subject.setName("newName");
+
+            when(subjectFactory.getValidation(UPDATE)).thenReturn(validation);
+            doNothing().when(validation).execute(subject);
+            doReturn(subject).when(subjectRepository).save(subject);
+
+            var result = subjectService.update(subject);
+
+            verify(subjectFactory).getValidation(UPDATE);
+            verify(validation).execute(subject);
+            verify(subjectRepository).save(subject);
+            assertEquals(subject, result);
+        }
     }
 
-    @Test
-    void update() {
+    @Nested
+    class updateSubjectUsername {
+
+        @Test
+        void testUpdateSubjectUsername() {
+            var subject = createListSubjects(1L).getFirst();
+            var newUsername = "newUsername";
+            subject.setId(workspaceId);
+
+            doReturn(Optional.of(subject)).when(subjectRepository).findById(workspaceId);
+
+            when(subjectFactory.getValidation(UPDATE)).thenReturn(validation);
+            doNothing().when(validation).execute(subject);
+            doReturn(subject).when(subjectRepository).save(subject);
+
+            var result = subjectService.updateToUsername(subject, newUsername);
+
+            verify(subjectFactory).getValidation(UPDATE);
+            verify(validation).execute(subject);
+            verify(subjectRepository).save(subject);
+            assertEquals(newUsername, result.getUsername());
+        }
     }
 
-    @Test
-    void updateToUsername() {
+    @Nested
+    class updateSubjectEmail {
+
+        @Test
+        void testUpdateSubjectEmail() {
+            var subject = createListSubjects(1L).getFirst();
+            var newEmail = "newEmail@email.email";
+            subject.setId(workspaceId);
+
+            doReturn(Optional.of(subject)).when(subjectRepository).findById(workspaceId);
+
+            when(subjectFactory.getValidation(UPDATE)).thenReturn(validation);
+            doNothing().when(validation).execute(subject);
+            doReturn(subject).when(subjectRepository).save(subject);
+
+            var result = subjectService.updateToEmail(subject, newEmail);
+
+            verify(subjectFactory).getValidation(UPDATE);
+            verify(validation).execute(subject);
+            verify(subjectRepository).save(subject);
+            assertEquals(newEmail, result.getEmail());
+        }
     }
 
-    @Test
-    void updateToEmail() {
-    }
+    @Nested
+    class activateOrDeactivateSubject {
 
-    @Test
-    void activateOrDeactivate() {
+        @Test
+        void testActivateOrDeactivateSubject() {
+            var subject = createListSubjects(1L).getFirst();
+            subject.setId(workspaceId);
+
+            doReturn(Optional.of(subject)).when(subjectRepository).findById(workspaceId);
+            doReturn(subject).when(subjectRepository).save(subject);
+
+            var result = subjectService.activateOrDeactivate(workspaceId);
+
+            assertFalse(result);
+            verify(subjectRepository).save(subject);
+        }
     }
 
     private List<Subject> createListSubjects(Long amount) {

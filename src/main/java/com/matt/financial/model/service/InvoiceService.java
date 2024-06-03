@@ -69,11 +69,11 @@ public class InvoiceService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public Invoice activateOrDeactivate(Invoice invoice) {
+    public Boolean activateOrDeactivate(Invoice invoice) {
         var invoiceToUpdate = this.findById(invoice.getId());
 
         invoiceToUpdate.setActive(!invoiceToUpdate.getActive());
 
-        return this.save(invoiceToUpdate);
+        return this.save(invoiceToUpdate).getActive();
     }
 }

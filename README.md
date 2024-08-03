@@ -3,6 +3,7 @@
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![GraphQL](https://img.shields.io/badge/-GraphQL-E10098?style=for-the-badge&logo=graphql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-%230db7ed?style=for-the-badge&logo=Docker&logoColor=white)
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)
 
@@ -22,16 +23,25 @@ This project is an API built using Spring Boot, Java, GraphQL and PostgresSQL as
 ## Installation
 1. Clone the repository:
 ```bash
-git clone https://github.com/mattmiriani/financial.git
+git clone git@github.com:mattmiriani/financial-API.git
 ```
 2. Install dependencies:
 ```bash
 mvn install
 ```
-3. Install [PostgresSQL](https://www.postgresql.org/download/).
 
 ## Configuration
-- Create a user and database with the name "financial" and the user must contain the password "financial".
+
+### Docker
+- Run Docker Compose:
+```bash
+docker compose -f compose.yaml up -d --build
+```
+
+### Others
+- Install [PostgresSQL](https://www.postgresql.org/download/).
+- Create a PostgreSQL user with the username financial and password financial.
+- Create a database named financial.
 
 ## Usage
 1. Start the application

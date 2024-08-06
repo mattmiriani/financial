@@ -43,14 +43,6 @@ public class Subject implements Serializable {
     @Column(name = "active", nullable = false)
     private Boolean active = Boolean.TRUE;
 
-    public Subject(Subject subject, String password) {
-        this.name = subject.getName();
-        this.username = subject.getUsername();
-        this.email = subject.getEmail();
-        this.phone = subject.getPhone();
-        this.active = true;
-    }
-
     public void mergeForUpdate(Subject subject) {
         this.name = ofNullable(subject.getName()).orElse(this.name);
         this.username = ofNullable(subject.getUsername()).orElse(this.username);

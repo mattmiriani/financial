@@ -1,9 +1,0 @@
-input GroupAuthorityInput {
-    id: ID
-    name: String
-}
-
-type GroupAuthority {
-    id: ID
-    name: String
-}

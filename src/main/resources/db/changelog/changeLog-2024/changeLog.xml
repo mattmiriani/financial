@@ -185,5 +185,21 @@
             <column name="subject_id"/>
         </createIndex>
     </changeSet>
+    
+    <changeSet id="20240805185400" author="Matheus">
+        <dropTable tableName="group_authority" cascadeConstraints="true"/>
+        <dropTable tableName="authority" cascadeConstraints="true"/>
+        <dropColumn tableName="subject" columnName="group_authority_id"/>
+        <dropColumn tableName="subject" columnName="password"/>
+
+        <addColumn tableName="subject">
+            <column name="keycloak_id" type="${uuid_type}">
+                <constraints unique="true"/>
+            </column>
+        </addColumn>
+        <createIndex tableName="subject" indexName="subject_keycloak_IDX">
+            <column name="keycloak_id"/>
+        </createIndex>
+    </changeSet>
 
 </databaseChangeLog>

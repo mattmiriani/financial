@@ -1,6 +1,5 @@
 package com.matt.financial.model.specification;
 
-import com.matt.financial.config.security.entity.GroupAuthority;
 import com.matt.financial.model.entity.Subject;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -22,10 +21,6 @@ public class SubjectSpecification implements SpecificationDefault<Subject> {
         return (root, query, cb) -> cb.equal(root.get("phone"), phone);
     }
 
-    private Specification<Subject> groupAuthority(GroupAuthority groupAuthority) {
-        return (root, query, cb) -> cb.equal(root.join("groupAuthority").get("id"), groupAuthority.getId());
-    }
-
     public Specification<Subject> filter(Subject subject) {
         var builder = this.builder();
         var subjectOptional = ofNullable(subject);
@@ -35,7 +30,6 @@ public class SubjectSpecification implements SpecificationDefault<Subject> {
         subjectOptional.map(Subject::getEmail).map(this::email).ifPresent(builder::and);
         subjectOptional.map(Subject::getPhone).map(this::phone).ifPresent(builder::and);
         subjectOptional.map(Subject::getActive).map(this::isActive).ifPresent(builder::and);
-        subjectOptional.map(Subject::getGroupAuthority).map(this::groupAuthority).ifPresent(builder::and);
 
         return builder.build();
     }

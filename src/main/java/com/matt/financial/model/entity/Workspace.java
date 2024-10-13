@@ -50,7 +50,7 @@ public class Workspace implements Serializable {
     private List<Month> months = new ArrayList<>();
 
     @Transient
-    private List<Integer> monthsList;
+    private List<Integer> monthNumberList;
 
     public void mergeForUpdate(Workspace workspace) {
         this.name = ofNullable(workspace.getName()).orElse(this.name);

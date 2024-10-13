@@ -14,8 +14,8 @@ public class WorkspaceTypeTrimester implements WorkspaceTypeProcessor {
     @Override
     public void process(Workspace workspace) {
         var months = new ArrayList<Month>();
-        var initialMonth = LocalDate.now().getMonth().ordinal();
-        var finalMonth = LocalDate.now().getMonth().plus(TRIMESTER).ordinal();
+        var initialMonth = LocalDate.now().getMonth().getValue();
+        var finalMonth = LocalDate.now().getMonth().plus(TRIMESTER).getValue();
 
         this.process(months, workspace, initialMonth, finalMonth);
     }

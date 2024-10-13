@@ -12,6 +12,6 @@ public class WorkspaceTypeCustom implements WorkspaceTypeProcessor {
     public void process(Workspace workspace) {
         var months = new ArrayList<Month>();
 
-        this.process(months, workspace, workspace.getMonthsList());
+        this.process(months, workspace, workspace.getMonthNumberList());
     }
 }

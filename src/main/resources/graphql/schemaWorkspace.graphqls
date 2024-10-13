@@ -5,7 +5,7 @@ input WorkspaceInput {
     workspaceType: WorkspaceType
     subject: SubjectInput
     active: Boolean
-    monthsList: [Int]
+    monthNumberList: [Int]
 }
 
 type Workspace {

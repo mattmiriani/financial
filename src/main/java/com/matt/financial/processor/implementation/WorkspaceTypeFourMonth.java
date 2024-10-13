@@ -14,8 +14,8 @@ public class WorkspaceTypeFourMonth implements WorkspaceTypeProcessor {
     @Override
     public void process(Workspace workspace) {
         var months = new ArrayList<Month>();
-        var initialMonth = LocalDate.now().getMonth().ordinal();
-        var finalMonth = LocalDate.now().getMonth().plus(FOUR_MONTH).ordinal();
+        var initialMonth = LocalDate.now().getMonth().getValue();
+        var finalMonth = LocalDate.now().getMonth().plus(FOUR_MONTH).getValue();
 
         this.process(months, workspace, initialMonth, finalMonth);
     }

@@ -10,30 +10,73 @@
     <property name="uuid_type" value="uuid" dbms="postgresql"/>
     <property name="uuid_function" value="uuid_generate_v4()" dbms="postgresql"/>
 
-    <changeSet id="20240426210300" author="Matheus">
-        <insert tableName="group_authority">
-            <column name="name">OWNER</column>
+    <!-- populating bank -->
+    <changeSet id="20240805200800" author="Matheus">
+        <insert tableName="subject">
+            <column name="created_at" valueComputed="(select now())"/>
+            <column name="name" value="User Master"/>
+            <column name="username" value="user_master"/>
+            <column name="email" value="user@master.com"/>
+            <column name="phone" value="44997111111"/>
+            <column name="active" value="true"/>
+        </insert>
+    </changeSet>
+    
+    <changeSet id="20240805201200" author="Matheus">
+        <insert tableName="workspace">
+            <column name="created_at" valueComputed="(select now())"/>
+            <column name="name" value="workspace_master"/>
+            <column name="description" value="primary workspace"/>
+            <column name="workspace_type" value="CUSTOM"/>
+            <column name="active" value="true"/>
+            <column name="subject_id" valueComputed="(select id
+                                                      from subject
+                                                      where username = 'user_master'
+                                                        and email = 'user@master.com'
+                                                        and phone = '44997111111')"/>
         </insert>
     </changeSet>
 
-    <changeSet id="20240426210500" author="Matheus">
-        <sql>
-            INSERT INTO authority (name, "order", group_authority_id)
-            VALUES ('OWNER', 0, (SELECT id FROM group_authority WHERE name = 'OWNER'));
-        </sql>
-    </changeSet>
-
-    <changeSet id="20240426210800" author="Matheus">
-        <insert tableName="group_authority">
-            <column name="name">USER</column>
+    <changeSet id="20240805201800" author="Matheus">
+        <insert tableName="month">
+            <column name="created_at" valueComputed="(select now())"/>
+            <column name="name" value="JANUARY"/>
+            <column name="amount" value="1"/>
+            <column name="active" value="true"/>
+            <column name="workspace_id" valueComputed="(select id
+                                                        from workspace
+                                                        where subject_id =
+                                                              (select id
+                                                               from subject
+                                                               where username = 'user_master'
+                                                                 and email = 'user@master.com'
+                                                                 and phone = '44997111111'))"/>
         </insert>
     </changeSet>
 
-    <changeSet id="20240426210900" author="Matheus">
-        <sql>
-            INSERT INTO authority (name, "order", group_authority_id)
-            VALUES ('USER', 1, (SELECT id FROM group_authority WHERE name = 'USER'));
-        </sql>
+    <changeSet id="20240805202400" author="Matheus">
+        <insert tableName="invoice">
+            <column name="created_at" valueComputed="(select now())"/>
+            <column name="name" value="Primary invoice"/>
+            <column name="value" value="1"/>
+            <column name="active" value="true"/>
+            <column name="month_id" valueComputed="(select id
+                                                    from month
+                                                    where workspace_id = (select id
+                                                                          from workspace
+                                                                          where subject_id =
+                                                                                (select id
+                                                                                 from subject
+                                                                                 where username = 'user_master'
+                                                                                   and email = 'user@master.com'
+                                                                                   and phone = '44997111111')))"/>
+            <column name="subject_id" valueComputed="(select id
+                                                      from subject
+                                                      where username = 'user_master'
+                                                        and email = 'user@master.com'
+                                                        and phone = '44997111111')"/>
+        </insert>
     </changeSet>
+    <!-- -->
 
 </databaseChangeLog>

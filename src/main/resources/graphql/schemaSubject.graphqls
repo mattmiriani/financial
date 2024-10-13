@@ -5,7 +5,6 @@ input SubjectInput {
     email: String
     phone: String
     active: Boolean
-    groupAuthority: GroupAuthorityInput
 }
 
 type Subject {
@@ -15,5 +14,4 @@ type Subject {
     email: String
     phone: String
     active: Boolean
-    groupAuthority: GroupAuthority
 }

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <property name="uuid_type" value="uuid" dbms="postgresql"/>
+    <property name="uuid_function" value="uuid_generate_v4()" dbms="postgresql"/>
+
+    <changeSet id="20240425222200" author="Matheus">
+        <createTable tableName="group_authority">
+            <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="group_authority" columnNames="id" constraintName="group_authority_PKEY"/>
+    </changeSet>
+
+    <changeSet id="20240425221300" author="Matheus">
+        <createTable tableName="subject">
+            <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar"/>
+            <column name="active" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_authority_id" type="${uuid_type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="subject" columnNames="id" constraintName="subject_PKEY"/>
+        <addUniqueConstraint tableName="subject" columnNames="username" constraintName="subject_username_UNK"/>
+        <addUniqueConstraint tableName="subject" columnNames="email" constraintName="subject_email_UNK"/>
+
+        <addForeignKeyConstraint baseTableName="subject" baseColumnNames="group_authority_id"
+                                 constraintName="subject_group_authority_FK"
+                                 referencedTableName="group_authority"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="subject" indexName="subject_group_authority_IDX">
+            <column name="group_authority_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20240425222300" author="Matheus">
+        <createTable tableName="authority">
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_authority_id" type="${uuid_type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="authority" columnNames="name" constraintName="authority_PKEY"/>
+
+        <addForeignKeyConstraint baseTableName="authority" baseColumnNames="group_authority_id"
+                                 constraintName="authority_group_authority_FK"
+                                 referencedTableName="group_authority"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="authority" indexName="authority_group_authority_IDX">
+            <column name="group_authority_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20240516224000" author="Matheus">
+        <createTable tableName="workspace">
+            <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+            <column name="workspace_type" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject_id" type="${uuid_type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="workspace" columnNames="id" constraintName="workspace_PKEY"/>
+
+        <addForeignKeyConstraint baseTableName="workspace" baseColumnNames="subject_id"
+                                 constraintName="workspace_subject_FK"
+                                 referencedTableName="subject"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="workspace" indexName="workspace_subject_IDX">
+            <column name="subject_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20240516224500" author="Matheus">
+        <createTable tableName="month">
+            <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="numeric(12,2)" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="${uuid_type}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="month" columnNames="id" constraintName="month_PKEY"/>
+
+        <addForeignKeyConstraint baseTableName="month" baseColumnNames="workspace_id"
+                                 constraintName="month_workspace_FK"
+                                 referencedTableName="workspace"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="month" indexName="month_workspace_IDX">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="20240525095800" author="Matheus">
+        <createTable tableName="invoice">
+            <column name="id" type="${uuid_type}" defaultValue="${uuid_function}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="value" type="numeric(12,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="month_id" type="${uuid_type}"/>
+            <column name="subject_id" type="${uuid_type}"/>
+        </createTable>
+        <addPrimaryKey tableName="invoice" columnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="invoice" baseColumnNames="month_id"
+                                 constraintName="invoice_month_FK"
+                                 referencedTableName="month"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="invoice" indexName="invoice_month_IDX">
+            <column name="month_id"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseTableName="invoice" baseColumnNames="subject_id"
+                                 constraintName="invoice_subject_FK"
+                                 referencedTableName="subject"
+                                 referencedColumnNames="id"/>
+        <createIndex tableName="invoice" indexName="invoice_subject_IDX">
+            <column name="subject_id"/>
+        </createIndex>
+    </changeSet>
+    
+    <changeSet id="20240805185400" author="Matheus">
+        <dropTable tableName="group_authority" cascadeConstraints="true"/>
+        <dropTable tableName="authority" cascadeConstraints="true"/>
+        <dropColumn tableName="subject" columnName="group_authority_id"/>
+        <dropColumn tableName="subject" columnName="password"/>
+
+        <addColumn tableName="subject">
+            <column name="keycloak_id" type="${uuid_type}">
+                <constraints unique="true"/>
+            </column>
+        </addColumn>
+        <createIndex tableName="subject" indexName="subject_keycloak_IDX">
+            <column name="keycloak_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

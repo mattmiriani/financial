@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: financial
+  datasource:
+    url: jdbc:postgresql://localhost:5432/financial
+    # noinspection SpringBootApplicationYaml
+    driver-class-name: org.postgresql.Driver
+    username: financial
+    password: financial
+  jpa:
+    properties.hibernate:
+      generate_statistics: false
+      order_by:
+        default_null_ordering: last
+    hibernate:
+      # noinspection SpringBootApplicationYaml
+      dialect: org.hibernate.dialect.PostgreSQL95alect
+      ddl-auto: validate
+    open-in-view: true
+    show-sql: false
+  liquibase:
+    change-log: classpath:db/changelog/changeLog.financial.default.xml
+    default-schema: public
+  servlet:
+    multipart:
+      maxFileSize: -1
+      maxRequestSize: -1
+  graphql:
+    graphiql:
+        enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/development
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+server:
+  port: 9090
+
+application:
+  key-api: "secret"

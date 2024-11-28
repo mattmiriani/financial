@@ -1,0 +1,17 @@
+input InvoiceInput {
+    id: ID
+    name: String
+    value: String
+    active: Boolean
+    month: MonthInput
+    subject: SubjectInput
+}
+
+type Invoice {
+    id: ID
+    name: String
+    value: String
+    active: Boolean
+    month: Month
+    subject: Subject
+}

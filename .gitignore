@@ -1,9 +1,0 @@
-### Compiled and Generated ###
-/target/
-
-### IntelliJ IDEA ###
-.idea
-
-### Maven ###
-/.mvn/wrapper/maven-wrapper.jar
-
